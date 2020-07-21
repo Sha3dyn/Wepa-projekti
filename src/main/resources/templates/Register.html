@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/layout :: head(title='Sign up for Networkers!')">
+        <title>Networkers singup</title>
+        <meta charset="UTF-8" />
+    </head> 
+    <body class="w3-theme-15">
+        <style th:replace="fragments/layout :: style"></style>
+        
+        <!-- Basic navbar and navbar for small screens -->
+        <div th:replace="fragments/layout :: navbar" class="w3-top"></div>
+        <div th:replace="fragments/layout :: smallNavbar" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large"></div>
+        
+        <div class="w3-container" style="max-width:400px;margin:auto;margin-top:150px;margin-bottom:150px">
+            <div class="w3-card w3-round w3-white">
+                <div class="w3-container w3-padding">
+                    <h4 class="w3-center">Register</h4>
+                    <p class="w3-center"><img src="/w3images/avatar3.png" class="w3-circle" style="height:106px;width:106px" alt="Avatar" /></p>
+                    <hr />
+                    <form class="form-inline" action="#" th:action="@{/register}" th:object="${account}" method="POST">
+                        <div class="form-group">
+                            <h6>Full name: </h6>
+                            <input class="form-control" type="text" th:field="*{name}" placeholder="Enter your full name" style="width:100%" />
+                            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="w3-opacity">Name Virheviesti</span>
+                            <br /><br />
+                            <h6>Username:</h6>
+                            <input type="text" th:field="*{username}" style="width:100%;" placeholder="Enter username" />
+                            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="w3-opacity">Username Virheviesti</span>
+                            <br /><br />
+                            <h6>Password:</h6>
+                            <input  type="password" th:field="*{password}" style="width:100%;" placeholder="Enter password" />
+                            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="w3-opacity">Password Virheviesti</span>
+                            <br /><br />
+                            <h6>Name of your personal page (for contacting):</h6>
+                            <input type="text" th:field="*{pagename}" style="width:100%;" placeholder="Enter pagename" />
+                            <span th:if="${#fields.hasErrors('pagename')}" th:errors="*{pagename}" class="w3-opacity">Pagename Virheviesti</span>
+                            <br /><br />
+                            <div class="form-group">
+                                <button type="submit" class="w3-button w3-theme-d1 w3-margin-bottom">   Sign up</button>
+                                  or 
+                                <a href="/login">Already have an account?</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <footer th:replace="fragments/layout :: footerSecond" class="w3-container w3-theme-d5"></footer>
+    </body>
+</html>

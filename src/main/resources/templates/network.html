@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/layout :: head(title='Welcome to Networkers')">
+        <meta charset="UTF-8" />
+        <title>Hello world</title>
+    </head>
+    <body class="w3-theme-l5">
+        <style th:replace="fragments/layout :: style"></style>
+
+        <!-- Basic navbar and navbar for small screens -->
+        <div th:replace="fragments/layout :: navbarLogged(user = ${currentUser})" class="w3-top"></div>
+        <div th:replace="fragments/layout :: smallNavbarLogged" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large"></div>
+        
+        <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
+            <div class="w3-row">
+                <div th:replace="fragments/layout :: sidelinks" id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large"></div>
+                
+                <!-- Middle Column -->
+                <div class="w3-col m7">
+                    <div class="w3-row-padding">
+                        <div class="w3-col m12">
+                            <div class="w3-card w3-round w3-white">
+                                <div class="w3-container w3-padding">
+                                    <form action="#" th:action="@{/network}" th:object="${searchedUser}" method="GET">
+                                        <h6 class="w3-opacity">Search for users</h6>
+                                        <input type="text" th:field="*{username}" style="width:100%" />
+                                        <br /><br/>
+                                        <button type="submit" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Search</button> 
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div th:if="${accounts.isEmpty()}">
+                        <h4 class="w3-center">No accounts to show</h4>
+                    </div>
+                    <div th:each="account: ${accounts}" th:if="${account != currentUser}">
+                        <div class="w3-container w3-card w3-white w3-round w3-margin"><br />
+                            <div class="w3-center" th:switch="${account.profileImage}">
+                                <img th:case="null" th:src="@{/images/blankpic.png}" class="w3-circle" style="height:60px;width:60px" alt="Avatar" />
+                                <img th:case="*" th:src="@{/image/{id}(id=${account.profileImage.id})}" class="w3-circle" style="height:60px;width:60px" alt="Avatar" />
+                            </div>
+                            <a th:href="@{/personal/} + ${account.username}" style="text-decoration:none;"><h4 class="w3-center" th:text="${account.name}">Full name</h4></a>
+                            <h6 class="w3-opacity w3-center" th:text="${account.username}">Username</h6>
+                            <form class="form-inline" th:action="@{/network/{id}/remove(id=${account.id})}" method="POST">
+                                <div th:if="${#lists.contains(connections, account)}">
+                                    <button class="w3-button w3-block w3-red w3-section" title="Decline" type="submit"><i class="fa fa-remove"></i>  Remove connection</button>
+                                </div>
+                            </form>
+                            
+                            <form class="form-inline" th:action="@{/network/{id}/cancel(id=${account.id})}" method="POST">
+                                <div th:if="${#lists.contains(requested, account)}">
+                                    <button class="w3-button w3-block w3-red w3-section" title="Decline" type="submit"><i class="fa fa-remove"></i>  Remove sent request</button>
+                                </div>
+                            </form>
+                            
+                            <div th:if="${#lists.contains(received, account)}">
+                                <form class="form-inline" th:action="@{/network/{id}/accept(id=${account.id})}" method="POST">
+                                    <div class="w3-half">
+                                        <button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i> Accept request</button>
+                                    </div>
+                                </form>
+                                <form class="form-inline" th:action="@{/network/{id}/reject(id=${account.id})}" method="POST">
+                                    <div class="w3-half">
+                                        <button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i> Decline request</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <form class="form-inline" th:action="@{/network/{id}/request(id=${account.id})}" method="POST">
+                                <div th:if="${not #lists.contains(connections, account)} and ${not #lists.contains(requested, account)} and ${not #lists.contains(received, account)}">
+                                    <button class="w3-button w3-block w3-green w3-section" type="submit"><i class="fa fa-check"></i>  Connect</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div style="min-height:50px"></div>
+        </div>       
+        
+        <footer th:replace="fragments/layout :: footerSecond" class="w3-container w3-theme-d5"></footer>
+    </body>
+</html>

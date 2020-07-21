@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<!-- HEAD -->
+<head th:fragment="head(title)" lang="en">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css" />
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <title th:text="${title}">Networkers</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<!-- BODY -->
+<body>
+      
+<!-- STYLE -->
+<style th:fragment="style"> html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif} </style>
+    
+<!-- NAVBAR -->
+<div th:fragment="navbar" class="w3-top">
+    <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+        <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Networkers</a>
+        <a th:href="@{/login}" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="Login">Login</a>
+    </div>
+</div>
+
+<!-- NAVBAR ON SMALL SCREENS -->
+<div th:fragment="smallNavbar" id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
+</div>
+
+<!-- NAVBAR FOR LOGGED USER -->
+<div th:fragment="navbarLogged" class="w3-top">
+    <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+        <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+        <a href="/personal" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Networkers</a>
+        <a href="/network" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Network"><i class="fa fa-globe"></i></a>
+        <a href="/shared" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Forum"><i class="fa fa-comments"></i></a>
+        <div class="w3-dropdown-hover w3-hide-small">
+            <a href="#" class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i></a>
+            <div th:if="${not #lists.isEmpty(currentUser.receivedRequests)}" class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px">
+                <a href="/requests" class="w3-bar-item w3-button">You have new connection requests</a>
+            </div>
+        </div>
+        <div class="w3-dropdown-hover w3-hide-small w3-right">
+            <a href="#" class="w3-button w3-padding-large" title="My Account" th:switch="${currentUser.profileImage}">
+                <img th:case="null" th:src="@{/images/blankpic.png}" class="w3-circle" style="height:23px;width:23px" alt="Avatar" />
+                <img th:case="*" th:src="@{/image/{id}(id=${currentUser.profileImage.id})}" class="w3-circle" style="height:23px;width:23px" alt="Avatar" />
+                <span th:text="${currentUser.username}"></span>
+            </a>
+            <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:50px">
+                <a th:href="@{/logout}" class="w3-bar-item w3-button">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- NAVBAR ON SMALL SCREENS FOR LOGGED USER -->
+<div th:fragment="smallNavbarLogged" id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
+</div>
+
+<!-- SIDELINKS FOR NETWORK PAGES -->
+<div th:fragment="sidelinks" class="w3-col m3">
+    <div class="w3-card w3-round">
+        <div class="w3-white">
+            <a th:href="@{/network}" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-user-plus fa-fw w3-margin-right"></i> Grow Network</a>
+            <a th:href="@{/mynetwork}" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> My connections</a>
+            <a th:href="@{/requests}" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-user-circle-o fa-fw w3-margin-right"></i> Pending requests</a>
+        </div>
+    </div>
+    <br />                
+</div>
+
+<!-- FOOTERS -->
+<footer th:fragment="footerFirst" class="w3-container w3-theme-d3 w3-padding-16" style="position:absolute;bottom:40;width:100%;">
+    <h5>© Sha3dyn</h5>
+</footer>
+
+<footer th:fragment="footerSecond" class="w3-container w3-theme-d5" style="position:fixed;bottom:0;width:100%;">
+    <p>Tämä projekti on toteutettu Helsingin yliopiston <a href="https://web-palvelinohjelmointi-20.mooc.fi/" target="_blank">Web-palvelinohjelmointi </a> -kurssin harjoitustyönä.</p>
+</footer>
+
+</body>
+</html>

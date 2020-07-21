@@ -27,7 +27,8 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 public class Image extends AbstractPersistable<Long> {
     //@Lob // Remove for Heroku
     //@Basic(fetch = FetchType.LAZY) // Remove for Heroku
-    @Column(name = "content", columnDefinition="LONGBLOB") // To remove too long value error
+    //@Column(name = "content", columnDefinition="LONGBLOB") // Use this when not on heroku
+    @Column(name = "content") // Use this on heroku
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] content;
 }

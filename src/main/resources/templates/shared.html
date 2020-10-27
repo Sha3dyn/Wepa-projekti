@@ -40,11 +40,11 @@
                             <hr class="w3-clear" />
                             <p  th:text="${post.content}">Lorem ipsum</p>
                             <form class="form-inline" action="#" th:action="@{/shared/{id}/likes(id=${post.id})}" method="POST">
-                                <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" onclick="showComment()"><i class="fa fa-comment"></i>  Comment</button>
+                                <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" th:attr="onclick=|showComment('${post.id}')|"><i class="fa fa-comment"></i>  Comment</button>
                                 <button th:disabled="${post.likers.contains(currentUser)}" type="submit" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
                                 <p  th:text="${#lists.size(post.likers)} + ' users likes this'">Likes</p>
                             </form>
-                            <div id="comment" th:hidden="true">
+                            <div th:id="'comment' + ${post.id}" th:hidden="true">
                                 <form action="#" th:action="@{/shared/{id}/comment(id=${post.id})}" th:object="${comment}" method="POST">
                                     <h6 class="w3-opacity">Type your comment:</h6>
                                     <input type="text" th:field="*{content}" style="width:100%" />
@@ -72,8 +72,8 @@
         
         <!-- Scripts -->
         <script>
-            function showComment() {
-                var commentField = document.getElementById("comment");
+            function showComment(id) {
+                var commentField = document.getElementById("comment" + id);
                 
                 if(commentField.style.display === "none" || commentField.style.display === "") {
                     commentField.style.display = "block";
